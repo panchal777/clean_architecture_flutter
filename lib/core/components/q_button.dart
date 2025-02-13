@@ -76,7 +76,7 @@ class QButton extends StatelessWidget {
   Widget _buttonContent() {
     return state == QButtonState.loading
         ? CircularProgressIndicator(value: 2)
-        : Text(text);
+        : Text(text, style: TextStyle(fontSize: 13));
   }
 
   @override

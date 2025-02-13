@@ -1,8 +1,10 @@
 import 'package:clean_architecture_flutter/core/components/q_app_bar.dart';
 import 'package:clean_architecture_flutter/core/components/q_button.dart';
 import 'package:clean_architecture_flutter/core/components/q_text.dart';
+import 'package:clean_architecture_flutter/core/router/app_router.dart';
 import 'package:clean_architecture_flutter/features/company/presentation/widgets/bind_dashboard_card.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -11,7 +13,7 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: QAppBar(title: 'Dashboard'),
+        appBar: QAppBar(title: 'Dashboard', hideBackPressed: true),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -29,13 +31,17 @@ class DashboardScreen extends StatelessWidget {
                   title: 'Add to Bank Balance',
                   btnText: 'Savings',
                   qBtnType: QButtonType.tonal,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.pushNamed(AppRouteName.saving);
+                  },
                 ),
                 bindRows(
                   title: 'Withdraw amount',
                   btnText: 'Withdraw',
                   qBtnType: QButtonType.tonal,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.pushNamed(AppRouteName.withdraw);
+                  },
                 ),
                 bindRows(
                   title: 'Check History',
@@ -51,25 +57,27 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  bindRows({
-    required String title,
-    required String btnText,
-    required QButtonType qBtnType,
-    required Function onPressed,
-  }) {
+  bindRows(
+      {required String title,
+      required String btnText,
+      required QButtonType qBtnType,
+      required Function()? onPressed}) {
     return Row(
       children: [
         Expanded(
           child: QText(
             text: title,
             qTextType: QTextType.medium,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.normal,
           ),
         ),
         QButton(
           text: btnText,
           type: qBtnType,
-          onPress: () => onPressed,
+          state: QButtonState.enabled,
+          onPress: () {
+            onPressed!();
+          },
         ),
       ],
     );

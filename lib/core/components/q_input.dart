@@ -17,9 +17,17 @@ class QInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var outlineBorder = OutlineInputBorder(borderSide: BorderSide(width: 0.2));
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (title!.isNotEmpty) QText(text: title!, qTextType: QTextType.medium),
+        if (title!.isNotEmpty)
+          QText(
+            text: title!,
+            qTextType: QTextType.medium,
+            fontWeight: FontWeight.w600,
+          ),
         if (title!.isNotEmpty) SizedBox(height: 10),
         TextFormField(
           controller: controller ??
@@ -27,6 +35,11 @@ class QInput extends StatelessWidget {
                 text: initialValue ?? '',
               ),
           onChanged: (value) => onChanged,
+          decoration: InputDecoration(
+            focusedBorder: outlineBorder,
+            border: outlineBorder,
+            enabledBorder: outlineBorder,
+          ),
         )
       ],
     );

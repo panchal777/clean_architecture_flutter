@@ -9,6 +9,7 @@ class QAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   //toolBar height
   final double height;
+  final bool hideBackPressed;
 
   const QAppBar({
     super.key,
@@ -17,6 +18,7 @@ class QAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleStyle,
     this.centerTitle = false,
     this.backgroundColor,
+    this.hideBackPressed = false,
   });
 
   @override
@@ -27,16 +29,19 @@ class QAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: height,
       centerTitle: centerTitle,
       backgroundColor: backgroundColor ?? appBarTheme.backgroundColor,
-      leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-            size: appBarTheme.iconTheme?.size,
-          ),
-          onPressed: () {
-            QCommon.hideKeyboard();
-            Navigator.of(context).pop();
-          }),
+      leading: hideBackPressed
+          ? null
+          : IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+                size: appBarTheme.iconTheme?.size,
+              ),
+              onPressed: () {
+                QCommon.hideKeyboard();
+                Navigator.of(context).pop();
+              }),
+      automaticallyImplyLeading: !hideBackPressed,
       title: Text(
         title,
         maxLines: 1,

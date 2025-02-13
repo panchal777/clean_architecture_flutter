@@ -15,7 +15,7 @@ class QText extends StatelessWidget {
   });
 
   final double headerSize = 15;
-  final double mediumSize = 13;
+  final double mediumSize = 14;
   final double bodySize = 12;
   final double generalSize = 14;
 
