@@ -1,6 +1,7 @@
 import 'package:clean_architecture_flutter/core/components/q_app_bar.dart';
 import 'package:clean_architecture_flutter/core/components/q_button.dart';
 import 'package:clean_architecture_flutter/core/components/q_input.dart';
+import 'package:clean_architecture_flutter/core/utils/toaster.dart';
 import 'package:flutter/material.dart';
 
 class WithdrawAmountScreen extends StatelessWidget {
@@ -9,6 +10,7 @@ class WithdrawAmountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController withdrawAmountController = TextEditingController();
+    String companyName = '';
 
     return SafeArea(
       child: Scaffold(
@@ -26,6 +28,7 @@ class WithdrawAmountScreen extends StatelessWidget {
                 SizedBox(height: 8),
                 QInput(
                   title: 'Amount',
+                  isMandatory: true,
                   controller: withdrawAmountController,
                 ),
                 SizedBox(height: 30),
@@ -33,9 +36,14 @@ class WithdrawAmountScreen extends StatelessWidget {
                   child: QButton(
                     text: 'Submit',
                     onPress: () {
-                      if (withdrawAmountController.text.isNotEmpty) {
+                      if (withdrawAmountController.text.isNotEmpty &&
+                          companyName.isNotEmpty) {
                         debugPrint(
                             'Withdraw amount -> ${withdrawAmountController.text}');
+                      } else {
+                        Toaster.showMessage(
+                            'Please fill all the mandatory fields',
+                            isFailure: true);
                       }
                     },
                   ),

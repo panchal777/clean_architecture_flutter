@@ -22,8 +22,6 @@ class _SplashScreen extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.white,
-        child: FlutterLogo(size: MediaQuery.of(context).size.height));
+    return Scaffold(body: FlutterLogo(size: MediaQuery.of(context).size.height));
   }
 }
