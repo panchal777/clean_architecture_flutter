@@ -40,7 +40,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
               if (!state.notification!.isFailure) {
                 withdrawAmountController.text = '';
                 companyName = '';
-                context.pop();
+                context.pop('refresh');
                 context.pushNamed(AppRouteName.statement);
               }
             }
@@ -67,6 +67,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                       controller: withdrawAmountController,
                       keyBoardType: TextInputType.number,
                       inputFormatters: QInputFormatter.allowOnlyDigits(),
+                      maxLength: 10,
                     ),
                     SizedBox(height: 20),
                     Center(

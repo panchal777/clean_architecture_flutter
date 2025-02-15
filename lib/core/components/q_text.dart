@@ -6,12 +6,14 @@ class QText extends StatelessWidget {
   final String text;
   final FontWeight? fontWeight;
   final QTextType qTextType;
+  final TextAlign? textAlign;
 
   const QText({
     super.key,
     required this.text,
     this.fontWeight,
     required this.qTextType,
+    this.textAlign,
   });
 
   final double headerSize = 15;
@@ -37,6 +39,7 @@ class QText extends StatelessWidget {
     return Text(
       text,
       style: getTextStyle(),
+      textAlign: textAlign,
     );
   }
 }

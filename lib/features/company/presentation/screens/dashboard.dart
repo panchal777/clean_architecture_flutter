@@ -14,7 +14,11 @@ class DashboardScreen extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
-            children: [Expanded(child: DashboardCards()), DashboardButtons()],
+            children: [
+              Flexible(child: DashboardCards()),
+              SizedBox(height: 10),
+              DashboardButtons()
+            ],
           ),
         ),
       ),

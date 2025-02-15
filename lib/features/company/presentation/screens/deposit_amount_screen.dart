@@ -31,7 +31,7 @@ class DepositAmountScreen extends StatelessWidget {
 
               addAmountController.text = '';
               if (!state.notification!.isFailure) {
-                context.pop();
+                context.pop('refresh');
                 context.pushNamed(AppRouteName.statement);
               }
             }
@@ -50,6 +50,7 @@ class DepositAmountScreen extends StatelessWidget {
                       isMandatory: true,
                       keyBoardType: TextInputType.number,
                       inputFormatters: QInputFormatter.allowOnlyDigits(),
+                      maxLength: 10,
                     ),
                     SizedBox(height: 20),
                     Center(

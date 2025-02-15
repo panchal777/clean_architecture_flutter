@@ -10,16 +10,19 @@ class QInput extends StatelessWidget {
   final bool isMandatory;
   final TextInputType keyBoardType;
   final List<TextInputFormatter>? inputFormatters;
+  final int maxLength;
 
-  const QInput(
-      {super.key,
-      this.title,
-      this.controller,
-      this.initialValue,
-      this.onChanged,
-      this.isMandatory = true,
-      this.keyBoardType = TextInputType.text,
-      this.inputFormatters});
+  const QInput({
+    super.key,
+    this.title,
+    this.controller,
+    this.initialValue,
+    this.onChanged,
+    this.isMandatory = true,
+    this.keyBoardType = TextInputType.text,
+    this.inputFormatters,
+    this.maxLength = 50,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +57,9 @@ class QInput extends StatelessWidget {
             }
           },
           keyboardType: keyBoardType,
-          inputFormatters: inputFormatters,
+          inputFormatters:
+              inputFormatters ?? [LengthLimitingTextInputFormatter(maxLength)],
+          // maxLength: maxLength,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.all(10),
             isDense: true,

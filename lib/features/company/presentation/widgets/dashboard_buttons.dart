@@ -17,7 +17,7 @@ class DashboardButtons extends StatelessWidget {
         bindRows(
           title: AppStrings.addToBankBalance,
           btnText: AppStrings.deposit,
-          qBtnType: QButtonType.filled,
+          qBtnType: QButtonType.tonal,
           onPressed: () {
             navigateToNextPage(AppRouteName.saving, context);
           },
@@ -25,7 +25,7 @@ class DashboardButtons extends StatelessWidget {
         bindRows(
           title: AppStrings.withdrawAmount,
           btnText: AppStrings.withdraw,
-          qBtnType: QButtonType.filled,
+          qBtnType: QButtonType.tonal,
           onPressed: () {
             navigateToNextPage(AppRouteName.withdraw, context);
           },
@@ -33,7 +33,7 @@ class DashboardButtons extends StatelessWidget {
         bindRows(
           title: AppStrings.transactionHistory,
           btnText: AppStrings.statement,
-          qBtnType: QButtonType.filled,
+          qBtnType: QButtonType.tonal,
           onPressed: () {
             navigateToNextPage(AppRouteName.statement, context);
           },
@@ -74,7 +74,7 @@ class DashboardButtons extends StatelessWidget {
 
   navigateToNextPage(String routeName, BuildContext context) {
     context.pushNamed(routeName).then((value) {
-      if (context.mounted) {
+      if (context.mounted && value is String && value == 'refresh') {
         refreshList(context);
       }
     });

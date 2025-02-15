@@ -69,7 +69,7 @@ class TransactionDB {
       // previousTotalDeposited = result.first['totalDeposited'] ?? 0.0;
       // previousTotalWithdrawals = result.first['totalWithdrawn'] ?? 0.0;
       previousFinalAmount = result.first['finalAmount'] ?? 0.0;
-      if (previousFinalAmount < checkBalance) {
+      if (previousFinalAmount < checkBalance && transaction.isWithdraw) {
         throw Exception('Insufficient Balance');
       }
     }

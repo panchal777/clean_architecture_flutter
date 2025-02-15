@@ -1,6 +1,7 @@
 import 'package:clean_architecture_flutter/core/components/q_app_bar.dart';
 import 'package:clean_architecture_flutter/core/components/q_card.dart';
 import 'package:clean_architecture_flutter/core/components/q_text.dart';
+import 'package:clean_architecture_flutter/core/utils/common.dart';
 import 'package:clean_architecture_flutter/core/utils/toaster.dart';
 import 'package:clean_architecture_flutter/features/company/domain/entities/transaction_data_model.dart';
 import 'package:clean_architecture_flutter/features/company/presentation/bloc/company_bloc.dart';
@@ -93,24 +94,23 @@ class StatementScreen extends StatelessWidget {
                             SizedBox(height: 10),
                             bindRows(
                               'Last Transaction Amount:',
-                              data.totalDeposited.toString(),
-                              fwValue: FontWeight.bold,
+                              QCommon.formatDecimal(data.totalDeposited),
                             ),
                             data.isWithdraw
                                 ? bindRows(
                                     'Debited:',
-                                    '- ${data.withdrawalAmount.toString()}',
+                                    '- ${QCommon.formatDecimal(data.withdrawalAmount)}',
                                     fwValueColor: Colors.red,
                                   )
                                 : bindRows(
                                     'Credited:',
-                                    '+ ${data.savingAmount.toString()}',
+                                    '+ ${(QCommon.formatDecimal(data.savingAmount))}',
                                     fwValueColor: Colors.green,
                                   ),
                             Divider(),
                             bindRows(
                               'Current Amount:',
-                              data.finalAmount.toString(),
+                              QCommon.formatDecimal(data.finalAmount),
                               fwValue: FontWeight.bold,
                             ),
                             SizedBox(height: 8),
@@ -127,7 +127,7 @@ class StatementScreen extends StatelessWidget {
 
   Widget bindMainCard(List<TransactionModel>? transactionHistory) {
     return QCard(
-      cardColor: Colors.deepPurple.shade100,
+      cardColor: Colors.deepPurple.shade50,
       padding: EdgeInsets.all(8),
       child: Column(
         children: [
@@ -152,7 +152,7 @@ class StatementScreen extends StatelessWidget {
   String getTotalSavings(List<TransactionModel> transactionHistory) {
     var totalSavingsA = sortAndSearchTransactions(transactionHistory, 'A');
     var totalSavingsB = sortAndSearchTransactions(transactionHistory, 'B');
-    return (totalSavingsA + totalSavingsB).toString();
+    return QCommon.formatDecimal((totalSavingsA + totalSavingsB)).toString();
   }
 
   sortAndSearchTransactions(
@@ -165,18 +165,18 @@ class StatementScreen extends StatelessWidget {
 
   String getTotalWithdrawals(
       List<TransactionModel>? transactionHistory, String companyName) {
-    return transactionHistory!
+    var amount = transactionHistory!
         .where((element) =>
             element.companyName == companyName) // Filter by company name
         .map((transaction) =>
             transaction.withdrawalAmount) // Extract withdrawal amounts
-        .fold(0.0, (sum, amount) => sum + amount) // Safely sum them up
-        .toString();
+        .fold(0.0, (sum, amount) => sum + amount); // Safely sum them up
+    return QCommon.formatDecimal(amount);
   }
 
   Widget bindRows(
     String title,
-    String value, {
+    dynamic value, {
     FontWeight? fwTitle,
     FontWeight? fwValue,
     Color? fwTitleColor,
@@ -195,7 +195,7 @@ class StatementScreen extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Text(
-            value,
+            value.toString(),
             textAlign: TextAlign.end,
             style: TextStyle(
                 fontWeight: fwValue, color: fwValueColor, fontSize: 14),

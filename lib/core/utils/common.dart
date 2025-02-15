@@ -7,8 +7,12 @@ class QCommon {
   }
 
   static String formatDecimal(double number) {
-    final formatter = NumberFormat('#,##0.00'); // Keeps two decimal places
-    return formatter.format(number);
+    try {
+      // double number = double.parse(value.replaceAll(',', ''));
+      return NumberFormat('#,##0.00').format(number);
+    } catch (e) {
+      return number.toString();
+    }
   }
 
   static String successMsg(String amount, String label) =>

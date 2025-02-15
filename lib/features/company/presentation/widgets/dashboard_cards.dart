@@ -15,24 +15,19 @@ class DashboardCards extends StatelessWidget {
     return BlocBuilder<CompanyBloc, CompanyState>(
         bloc: context.read<CompanyBloc>(),
         builder: (context, state) {
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: state.companyTransactionSummary?.length ?? 2,
-                  itemBuilder: (context, index) {
-                    var data = state.companyTransactionSummary?[index];
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: state.companyTransactionSummary?.length ?? 2,
+            itemBuilder: (context, index) {
+              var data = state.companyTransactionSummary?[index];
 
-                    return BindDashboardCard(
-                      companyName: data?.companyName ?? '',
-                      finalBalance: data?.finalBalance ?? 0,
-                      totalCredited: data?.totalCredited ?? 0,
-                      totalDebited: data?.totalDebited ?? 0,
-                    );
-                  },
-                ),
-              ),
-            ],
+              return BindDashboardCard(
+                companyName: data?.companyName ?? '',
+                finalBalance: data?.finalBalance ?? 0,
+                totalCredited: data?.totalCredited ?? 0,
+                totalDebited: data?.totalDebited ?? 0,
+              );
+            },
           );
         });
   }
@@ -106,7 +101,7 @@ Widget bindRows(
   QTextType? qTValue,
 }) {
   return Padding(
-    padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+    padding: const EdgeInsets.only(bottom: 10, left: 15, right: 15),
     child: Row(
       children: [
         Expanded(
@@ -122,6 +117,7 @@ Widget bindRows(
             text: value,
             qTextType: qTValue ?? QTextType.medium,
             fontWeight: fwValue,
+            textAlign: TextAlign.end,
           ),
         ),
       ],
