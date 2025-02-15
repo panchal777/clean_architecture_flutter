@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import '../entities/transaction_data_model.dart';
 
 abstract class CompanyRepository {
-  Future<Either<Failure, bool>> saveEntry(String amount);
+  Future<Either<Failure, bool>> saveDeposit(String amount);
 
   Future<Either<Failure, bool>> withdrawAmount(
       String amount, String companyName);

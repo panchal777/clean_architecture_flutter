@@ -4,9 +4,9 @@ part of 'company_bloc.dart';
 class CompanyEvent with _$CompanyEvent {
   const factory CompanyEvent.loaded() = _Loaded;
 
-  const factory CompanyEvent.fetchTransactionHistory() = _GetTransactionHistory;
+  const factory CompanyEvent.getTransactionHistory() = _GetTransactionHistory;
 
-  const factory CompanyEvent.saveEntry(String amount) = _SaveEntry;
+  const factory CompanyEvent.saveDeposit(String amount) = _SaveDeposit;
 
   const factory CompanyEvent.withdrawAmount(String amount,String companyName) =_WithdrawAmount ;
 

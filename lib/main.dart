@@ -16,22 +16,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<CompanyBloc>(
-            create: (context) => MainInjector.instance<CompanyBloc>()
-              ..add(CompanyEvent.getDashboardData()))
-      ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Assessment',
-        //Adding go router
-        routerConfig: AppRouter.baseRouters,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          appBarTheme: AppBarTheme(color: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Assessment',
+      //Adding go router
+      routerConfig: AppRouter.baseRouters,
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        appBarTheme: AppBarTheme(color: Colors.deepPurple),
+        useMaterial3: true,
       ),
     );
   }

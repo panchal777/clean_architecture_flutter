@@ -1,7 +1,6 @@
 import 'package:clean_architecture_flutter/core/components/q_app_bar.dart';
 import 'package:clean_architecture_flutter/core/components/q_button.dart';
 import 'package:clean_architecture_flutter/core/components/q_card.dart';
-import 'package:clean_architecture_flutter/core/components/q_drop_down.dart';
 import 'package:clean_architecture_flutter/core/components/q_input.dart';
 import 'package:clean_architecture_flutter/core/router/app_router.dart';
 import 'package:clean_architecture_flutter/core/utils/app_strings.dart';
@@ -12,23 +11,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class WithdrawAmountScreen extends StatefulWidget {
-  const WithdrawAmountScreen({super.key});
+class DepositAmountScreen extends StatelessWidget {
+  const DepositAmountScreen({super.key});
 
-  @override
-  State<WithdrawAmountScreen> createState() => _WithdrawAmountScreenState();
-}
-
-class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
   @override
   Widget build(BuildContext context) {
-    TextEditingController withdrawAmountController = TextEditingController();
-    String companyName = '';
-    List<String> companies = ['A', 'B'];
+    TextEditingController addAmountController = TextEditingController();
 
     return SafeArea(
       child: Scaffold(
-        appBar: QAppBar(title: 'Withdraw from Account'),
+        appBar: QAppBar(title: AppStrings.deposit),
         body: BlocListener<CompanyBloc, CompanyState>(
           bloc: context.read<CompanyBloc>(),
           listener: (context, state) {
@@ -36,8 +28,8 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                 state.notification!.message.isNotEmpty) {
               Toaster.showMessage(state.notification!.message,
                   isFailure: state.notification!.isFailure);
-              withdrawAmountController.text = '';
-              companyName = '';
+
+              addAmountController.text = '';
               context.pushNamed(AppRouteName.statement);
             }
           },
@@ -49,18 +41,10 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 8),
-                    QDropDown(
-                      title: AppStrings.company,
-                      dropDownList: companies,
-                      onChanged: (value) {
-                        companyName = value;
-                      },
-                    ),
-                    SizedBox(height: 8),
                     QInput(
-                      title: 'Amount',
+                      title: AppStrings.amount,
+                      controller: addAmountController,
                       isMandatory: true,
-                      controller: withdrawAmountController,
                       keyBoardType: TextInputType.number,
                       inputFormatters: QInputFormatter.allowOnlyDigits(),
                     ),
@@ -69,20 +53,16 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width,
                         child: QButton(
-                          text: 'Submit',
+                          text: AppStrings.submit,
                           onPress: () {
-                            if (withdrawAmountController.text.isNotEmpty &&
-                                companyName.isNotEmpty) {
-                              debugPrint(
-                                  'Withdraw amount -> ${withdrawAmountController.text}');
-
-                              context.read<CompanyBloc>().add(
-                                  CompanyEvent.withdrawAmount(
-                                      withdrawAmountController.text,
-                                      companyName));
+                            if (addAmountController.text.isNotEmpty) {
+                              context
+                                  .read<CompanyBloc>()
+                                  .add(CompanyEvent.saveDeposit(
+                                    addAmountController.text.trim(),
+                                  ));
                             } else {
-                              Toaster.showMessage(
-                                  'Please fill all the mandatory fields',
+                              Toaster.showMessage(AppStrings.validationErrorMsg,
                                   isFailure: true);
                             }
                           },

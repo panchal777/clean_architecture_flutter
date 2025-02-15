@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:clean_architecture_flutter/core/bloc/bloc_notifier.dart';
 import 'package:clean_architecture_flutter/core/bloc/failure.dart';
 import 'package:clean_architecture_flutter/core/bloc/ui_status.dart';
+import 'package:clean_architecture_flutter/core/utils/common.dart';
 import 'package:clean_architecture_flutter/features/company/domain/entities/company_transaction_summary.dart';
 import 'package:clean_architecture_flutter/features/company/domain/entities/transaction_data_model.dart';
 import 'package:clean_architecture_flutter/features/company/domain/repositories/company_repository.dart';
@@ -21,31 +22,34 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     required CompanyRepository companyRepository,
   }) : super(const CompanyState()) {
     _companyRepository = companyRepository;
-    on<_SaveEntry>(_saveEntry);
+    on<_SaveDeposit>(_saveDeposit);
     on<_WithdrawAmount>(_withdrawAmount);
     on<_GetTransactionHistory>(_getTransactionHistory);
     on<_GetDashboardData>(_getDashboardData);
   }
 
-  Future<void> _saveEntry(
-    _SaveEntry event,
+  Future<void> _saveDeposit(
+    _SaveDeposit event,
     Emitter<CompanyState> emit,
   ) async {
     emit(state.copyWith(status: UILoading(), notification: null));
-    var data = await _companyRepository.saveEntry(event.amount);
+    var data = await _companyRepository.saveDeposit(event.amount);
     data.fold(
       (onError) {
-        generalErrorHandlingUI(onError, emit);
+        generalErrorMessageListener(onError, emit);
       },
       (isDataSaved) {
         if (isDataSaved) {
           emit(state.copyWith(
               status: UILoadSuccess(),
               notification: BlocNotifier.success(
-                  message: '${event.amount} saved successfully')));
+                  message: QCommon.successMsg(
+                event.amount,
+                'deposited',
+              ))));
 
           //refreshing dashboard
-          add(CompanyEvent.getDashboardData());
+          //add(CompanyEvent.getDashboardData());
         }
       },
     );
@@ -60,18 +64,19 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
         event.amount, event.companyName);
     data.fold(
       (onError) {
-        generalErrorHandlingUI(onError, emit);
+        generalErrorMessageListener(onError, emit);
       },
       (isAmountWithdraw) {
         if (isAmountWithdraw) {
           emit(state.copyWith(
-            status: UILoadSuccess(),
-            notification: BlocNotifier.success(
-                message:
-                    '${event.amount} withdraw successfully from ${event.companyName}'),
-          ));
+              status: UILoadSuccess(),
+              notification: BlocNotifier.success(
+                  message: QCommon.successMsg(
+                event.amount,
+                'withdraw',
+              ))));
           //refreshing dashboard
-          add(CompanyEvent.getDashboardData());
+          //add(CompanyEvent.getDashboardData());
         }
       },
     );

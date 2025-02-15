@@ -1,3 +1,4 @@
+import 'package:clean_architecture_flutter/core/utils/color_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -16,7 +17,7 @@ class QInput extends StatelessWidget {
       this.controller,
       this.initialValue,
       this.onChanged,
-      this.isMandatory = false,
+      this.isMandatory = true,
       this.keyBoardType = TextInputType.text,
       this.inputFormatters});
 
@@ -48,13 +49,17 @@ class QInput extends StatelessWidget {
                 text: initialValue ?? '',
               ),
           onChanged: (value) {
-            if(onChanged!=null) {
+            if (onChanged != null) {
               onChanged!(value);
             }
           },
           keyboardType: keyBoardType,
           inputFormatters: inputFormatters,
           decoration: InputDecoration(
+            contentPadding: EdgeInsets.all(10),
+            isDense: true,
+            fillColor: ColorConstant.inputFilledColor,
+            filled: true,
             focusedBorder: outlineBorder,
             border: outlineBorder,
             enabledBorder: outlineBorder,

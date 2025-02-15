@@ -16,26 +16,30 @@ class CompanyLocalSrcImpl implements CompanyLocalSrc {
     ]);
 
     debugPrint('Inserted transaction IDs: ${results[0]}, ${results[1]}');
-    CompanyTransactionSummary companyTransactionSummaryA = CompanyTransactionSummary.fromJson(results[0]);
-    CompanyTransactionSummary companyTransactionSummaryB = CompanyTransactionSummary.fromJson(results[1]);
+    CompanyTransactionSummary companyTransactionSummaryA =
+        CompanyTransactionSummary.fromJson(results[0]);
+    CompanyTransactionSummary companyTransactionSummaryB =
+        CompanyTransactionSummary.fromJson(results[1]);
 
     return [companyTransactionSummaryA, companyTransactionSummaryB];
   }
 
   @override
   Future<List<TransactionModel>> getTransactionHistory() async {
-    List<TransactionModel> transactions =
-        await _transactionDB.getAllTransactions();
+    // List<TransactionModel> transactions =
+    //     await _transactionDB.getAllTransactions();
     // for (var t in transactions) {
     //   debugPrint(
     //       'ID: ${t.id}, Company: ${t.companyName}, Savings: ${t.savingAmount} '
     //       'Withdraw: ${t.withdrawalAmount}');
     // }
+    List<TransactionModel> transactions =
+        await _transactionDB.getAllTransactions();
     return transactions;
   }
 
   @override
-  Future<bool> saveEntry(String amount) async {
+  Future<bool> saveDeposit(String amount) async {
     double splitEqualAmount = int.parse(amount) / 2;
 
     // Insert a transaction
@@ -50,20 +54,16 @@ class CompanyLocalSrcImpl implements CompanyLocalSrc {
     var companyB = transaction.copyWith(companyName: 'B');
 
     var results = await Future.wait([
-      _transactionDB.insertTransaction(companyA),
-      _transactionDB.insertTransaction(companyB),
+      _transactionDB.insertTransactionWithTotalDeposit(companyA),
+      _transactionDB.insertTransactionWithTotalDeposit(companyB),
     ]);
 
     debugPrint('Inserted transaction IDs: ${results[0]}, ${results[1]}');
-
-    // Retrieve all transactions
-    await getTransactionHistory();
     return true;
   }
 
   @override
   Future<bool> withdrawAmount(String amount, String companyName) async {
-    // Insert a transaction
     TransactionModel transaction = TransactionModel(
       companyName: companyName,
       withdrawalAmount: double.parse(amount),
@@ -72,11 +72,9 @@ class CompanyLocalSrcImpl implements CompanyLocalSrc {
       updatedDate: DateTime.now(),
     );
 
-    int insertedIdA = await _transactionDB.insertTransaction(transaction);
+    int insertedIdA =
+        await _transactionDB.insertTransactionWithTotalDeposit(transaction);
     debugPrint('Inserted transaction ID $companyName: $insertedIdA');
-
-    // Retrieve all transactions
-    await getTransactionHistory();
     return true;
   }
 }

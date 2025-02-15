@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:clean_architecture_flutter/features/company/presentation/screens/dashboard.dart';
-import 'package:clean_architecture_flutter/features/company/presentation/screens/saving_amount_screen.dart';
+import 'package:clean_architecture_flutter/features/company/presentation/screens/deposit_amount_screen.dart';
 import 'package:clean_architecture_flutter/features/company/presentation/screens/statement_screen.dart';
 import 'package:clean_architecture_flutter/features/company/presentation/screens/withdraw_amount_screen.dart';
 import 'package:clean_architecture_flutter/features/splash/splash_screen.dart';
@@ -54,20 +54,31 @@ class AppRouter {
           return SplashScreen();
         },
         routes: [
+          //initialising local bloc
           GoRoute(
             name: AppRouteName.dashboard,
             path: AppRouteName.dashboard,
-            builder: (context, state) => DashboardScreen(),
+            builder: (context, state) => MultiBlocProvider(providers: [
+              BlocProvider<CompanyBloc>(
+                  create: (context) => MainInjector.instance<CompanyBloc>()
+                    ..add(CompanyEvent.getDashboardData()))
+            ], child: DashboardScreen()),
           ),
           GoRoute(
             name: AppRouteName.saving,
             path: AppRouteName.saving,
-            builder: (context, state) => SavingAmountScreen(),
+            builder: (context, state) => MultiBlocProvider(providers: [
+              BlocProvider<CompanyBloc>(
+                  create: (context) => MainInjector.instance<CompanyBloc>())
+            ], child: DepositAmountScreen()),
           ),
           GoRoute(
             name: AppRouteName.withdraw,
             path: AppRouteName.withdraw,
-            builder: (context, state) => WithdrawAmountScreen(),
+            builder: (context, state) => MultiBlocProvider(providers: [
+              BlocProvider<CompanyBloc>(
+                  create: (context) => MainInjector.instance<CompanyBloc>())
+            ], child: WithdrawAmountScreen()),
           ),
           GoRoute(
             name: AppRouteName.statement,
@@ -75,7 +86,7 @@ class AppRouter {
             builder: (context, state) => MultiBlocProvider(providers: [
               BlocProvider<CompanyBloc>(
                   create: (context) => MainInjector.instance<CompanyBloc>()
-                    ..add(CompanyEvent.fetchTransactionHistory()))
+                    ..add(CompanyEvent.getTransactionHistory()))
             ], child: StatementScreen()),
           ),
         ]),

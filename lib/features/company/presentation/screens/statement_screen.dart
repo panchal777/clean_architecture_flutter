@@ -1,5 +1,6 @@
 import 'package:clean_architecture_flutter/core/components/q_app_bar.dart';
 import 'package:clean_architecture_flutter/core/components/q_card.dart';
+import 'package:clean_architecture_flutter/core/components/q_text.dart';
 import 'package:clean_architecture_flutter/features/company/presentation/bloc/company_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,11 +19,21 @@ class StatementScreen extends StatelessWidget {
       body: BlocBuilder<CompanyBloc, CompanyState>(
           bloc: bloc,
           builder: (context, state) {
-            return state.status.when(
-              initial: () => Center(child: CircularProgressIndicator()),
-              loading: () => Center(child: CircularProgressIndicator()),
-              loadFailed: (message) => Text('Error: $message'),
-              loadSuccess: (_) => bindStatement(state),
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: state.status.when(
+                    initial: () => Center(child: CircularProgressIndicator()),
+                    loading: () => Center(child: CircularProgressIndicator()),
+                    loadFailed: (message) => Center(
+                        child: QText(
+                            text: 'Error: $message',
+                            qTextType: QTextType.header)),
+                    loadSuccess: (_) => bindStatement(state),
+                  ),
+                ),
+              ],
             );
           }),
     );
@@ -32,7 +43,11 @@ class StatementScreen extends StatelessWidget {
     return state.transactionHistory == null ||
             (state.transactionHistory != null &&
                 state.transactionHistory!.isEmpty)
-        ? Text('No Data Found')
+        ? Center(
+            child: QText(
+            text: 'No Data Found',
+            qTextType: QTextType.header,
+          ))
         : ListView.builder(
             padding: EdgeInsets.all(8),
             itemCount: state.transactionHistory!.length,
@@ -44,19 +59,44 @@ class StatementScreen extends StatelessWidget {
                   children: [
                     bindRows('Company Name:', data.companyName),
                     SizedBox(height: 8),
+                    // data.isWithdraw
+                    //     ? bindRows(
+                    //         'Debited:',
+                    //         data.withdrawalAmount.toString(),
+                    //         fwValueColor: Colors.red,
+                    //         fwValue: FontWeight.bold,
+                    //       )
+                    //     : bindRows(
+                    //         'Credited:',
+                    //         data.savingAmount.toString(),
+                    //         fwValueColor: Colors.green,
+                    //         fwValue: FontWeight.bold,
+                    //       ),
+                    SizedBox(height: 10),
+                    bindRows(
+                      'Last Transaction Amount:',
+                      data.totalDeposited.toString(),
+                      fwValue: FontWeight.bold,
+                    ),
                     data.isWithdraw
                         ? bindRows(
                             'Debited:',
-                            data.withdrawalAmount.toString(),
+                            '- ${data.withdrawalAmount.toString()}',
                             fwValueColor: Colors.red,
                             fwValue: FontWeight.bold,
                           )
                         : bindRows(
                             'Credited:',
-                            data.savingAmount.toString(),
+                            '+ ${data.savingAmount.toString()}',
                             fwValueColor: Colors.green,
                             fwValue: FontWeight.bold,
                           ),
+                    Divider(),
+                    bindRows(
+                      'Current Amount:',
+                      data.finalAmount.toString(),
+                      fwValue: FontWeight.bold,
+                    ),
                     SizedBox(height: 8),
                   ],
                 ),
@@ -87,10 +127,12 @@ class StatementScreen extends StatelessWidget {
           flex: 1,
           child: Text(
             value,
+            textAlign: TextAlign.end,
             style: TextStyle(
                 fontWeight: fwTitle, color: fwValueColor, fontSize: 14),
           ),
         ),
+        SizedBox(width: 10)
       ],
     );
   }

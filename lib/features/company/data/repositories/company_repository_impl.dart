@@ -11,7 +11,8 @@ class CompanyRepositoryImpl extends CompanyRepository {
   CompanyRepositoryImpl({required this.companyLocalSrc});
 
   @override
-  Future<Either<Failure, List<CompanyTransactionSummary>>> getDashboardData() async {
+  Future<Either<Failure, List<CompanyTransactionSummary>>>
+      getDashboardData() async {
     try {
       var response = await companyLocalSrc.getDashboardData();
       return Right(response);
@@ -21,9 +22,9 @@ class CompanyRepositoryImpl extends CompanyRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> saveEntry(String amount) async {
+  Future<Either<Failure, bool>> saveDeposit(String amount) async {
     try {
-      var response = await companyLocalSrc.saveEntry(amount);
+      var response = await companyLocalSrc.saveDeposit(amount);
       return Right(response);
     } catch (e, s) {
       return Left(await checkErrorState(e, s));

@@ -3,7 +3,7 @@ import 'package:clean_architecture_flutter/features/company/domain/entities/comp
 import '../../domain/entities/transaction_data_model.dart';
 
 abstract class CompanyLocalSrc {
-  Future<bool> saveEntry(String amount);
+  Future<bool> saveDeposit(String amount);
 
   Future<bool> withdrawAmount(String amount, String companyName);
 
