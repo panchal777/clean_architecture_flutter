@@ -55,17 +55,17 @@ Example Scenario
 5) The user checks history and sees:
    a) Year 2025: Savings - 100,000, Withdrawn - 10,000 (CompA)
 
-![App Screenshot](assets/images/1_initial_dashboard.png)
+![App Screenshot](assets/images/1_initial_dashboard.png){width=300 height=600}
 
-![App Screenshot](assets/images/2_deposit_amount.png)
+![App Screenshot](assets/images/2_deposit_amount.png){width=300 height=600}
 
-![App Screenshot](assets/images/3_deposit_statement.png)
+![App Screenshot](assets/images/3_deposit_statement.png){width=300 height=600}
 
-![App Screenshot](assets/images/4_deposit_verify_dashboard.png)
+![App Screenshot](assets/images/4_deposit_verify_dashboard.png){width=300 height=600}
 
-![App Screenshot](assets/images/5_withdraw_amount.png)
+![App Screenshot](assets/images/5_withdraw_amount.png){width=300 height=600}
 
-![App Screenshot](assets/images/6_statement.png)
+![App Screenshot](assets/images/6_statement.png){width=300 height=600}
 
 
 
