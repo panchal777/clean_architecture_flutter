@@ -1,5 +1,7 @@
 import 'package:clean_architecture_flutter/core/bloc/failure.dart';
 import 'package:clean_architecture_flutter/features/company/data/data_source/company_local_src.dart';
+import 'package:clean_architecture_flutter/features/company/domain/entities/company_transaction_summary.dart';
+import 'package:clean_architecture_flutter/features/company/domain/entities/transaction_data_model.dart';
 import 'package:clean_architecture_flutter/features/company/domain/repositories/company_repository.dart';
 import 'package:dartz/dartz.dart';
 
@@ -9,7 +11,7 @@ class CompanyRepositoryImpl extends CompanyRepository {
   CompanyRepositoryImpl({required this.companyLocalSrc});
 
   @override
-  Future<Either<Failure, dynamic>> getDashboardData() async {
+  Future<Either<Failure, List<CompanyTransactionSummary>>> getDashboardData() async {
     try {
       var response = await companyLocalSrc.getDashboardData();
       return Right(response);
@@ -19,17 +21,7 @@ class CompanyRepositoryImpl extends CompanyRepository {
   }
 
   @override
-  Future<Either<Failure, dynamic>> getTransactionHistory() async {
-    try {
-      var response = await companyLocalSrc.getTransactionHistory();
-      return Right(response);
-    } catch (e, s) {
-      return Left(await checkErrorState(e, s));
-    }
-  }
-
-  @override
-  Future<Either<Failure, dynamic>> saveEntry(String amount) async {
+  Future<Either<Failure, bool>> saveEntry(String amount) async {
     try {
       var response = await companyLocalSrc.saveEntry(amount);
       return Right(response);
@@ -39,10 +31,21 @@ class CompanyRepositoryImpl extends CompanyRepository {
   }
 
   @override
-  Future<Either<Failure, dynamic>> withdrawAmount(
+  Future<Either<Failure, bool>> withdrawAmount(
       String amount, String companyName) async {
     try {
       var response = await companyLocalSrc.withdrawAmount(amount, companyName);
+      return Right(response);
+    } catch (e, s) {
+      return Left(await checkErrorState(e, s));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<TransactionModel>>>
+      getTransactionHistory() async {
+    try {
+      var response = await companyLocalSrc.getTransactionHistory();
       return Right(response);
     } catch (e, s) {
       return Left(await checkErrorState(e, s));

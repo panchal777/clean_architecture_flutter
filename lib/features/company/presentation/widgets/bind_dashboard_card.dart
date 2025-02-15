@@ -1,18 +1,21 @@
 import 'package:clean_architecture_flutter/core/components/q_card.dart';
 import 'package:clean_architecture_flutter/core/components/q_text.dart';
 import 'package:clean_architecture_flutter/core/utils/app_strings.dart';
+import 'package:clean_architecture_flutter/core/utils/common.dart';
 import 'package:flutter/material.dart';
 
 class BindDashboardCard extends StatelessWidget {
   final String companyName;
-  final String savings;
-  final String withdraw;
+  final double totalCredited;
+  final double totalDebited;
+  final double finalBalance;
 
   const BindDashboardCard({
     super.key,
     required this.companyName,
-    required this.savings,
-    required this.withdraw,
+    required this.totalCredited,
+    required this.totalDebited,
+    required this.finalBalance,
   });
 
   @override
@@ -30,9 +33,11 @@ class BindDashboardCard extends StatelessWidget {
           qTValue: QTextType.header,
         ),
         SizedBox(height: 10),
-        bindRows(AppStrings.savings, savings),
+        bindRows(AppStrings.totalCredited, QCommon.formatDecimal(totalCredited)),
         SizedBox(height: 10),
-        bindRows(AppStrings.withdraw, withdraw),
+        bindRows(AppStrings.totalDebited, QCommon.formatDecimal(totalDebited)),
+        SizedBox(height: 10),
+        bindRows(AppStrings.finalBalance,  QCommon.formatDecimal(finalBalance)),
         SizedBox(height: 10),
       ],
     ));
@@ -57,7 +62,6 @@ class BindDashboardCard extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 2,
           child: QText(
             text: value,
             qTextType: qTValue ?? QTextType.medium,

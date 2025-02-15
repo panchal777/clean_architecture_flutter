@@ -19,7 +19,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<CompanyBloc>(
-            create: (context) => MainInjector.instance<CompanyBloc>())
+            create: (context) => MainInjector.instance<CompanyBloc>()
+              ..add(CompanyEvent.getDashboardData()))
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

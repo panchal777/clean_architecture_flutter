@@ -1,16 +1,22 @@
 import 'dart:developer';
 import 'package:clean_architecture_flutter/features/company/presentation/screens/dashboard.dart';
 import 'package:clean_architecture_flutter/features/company/presentation/screens/saving_amount_screen.dart';
+import 'package:clean_architecture_flutter/features/company/presentation/screens/statement_screen.dart';
 import 'package:clean_architecture_flutter/features/company/presentation/screens/withdraw_amount_screen.dart';
 import 'package:clean_architecture_flutter/features/splash/splash_screen.dart';
+import 'package:clean_architecture_flutter/injectors/main_injector.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../features/company/presentation/bloc/company_bloc.dart';
 
 class AppRouteName {
   static const String dashboard = 'dashboard';
   static const String saving = 'saving';
   static const String withdraw = 'withdraw';
   static const String history = 'history';
+  static const String statement = 'statement';
 }
 
 class AppRouter {
@@ -62,6 +68,15 @@ class AppRouter {
             name: AppRouteName.withdraw,
             path: AppRouteName.withdraw,
             builder: (context, state) => WithdrawAmountScreen(),
+          ),
+          GoRoute(
+            name: AppRouteName.statement,
+            path: AppRouteName.statement,
+            builder: (context, state) => MultiBlocProvider(providers: [
+              BlocProvider<CompanyBloc>(
+                  create: (context) => MainInjector.instance<CompanyBloc>()
+                    ..add(CompanyEvent.fetchTransactionHistory()))
+            ], child: StatementScreen()),
           ),
         ]),
   ];

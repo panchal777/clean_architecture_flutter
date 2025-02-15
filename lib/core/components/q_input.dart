@@ -7,15 +7,18 @@ class QInput extends StatelessWidget {
   final String? initialValue;
   final ValueChanged? onChanged;
   final bool isMandatory;
+  final TextInputType keyBoardType;
+  final List<TextInputFormatter>? inputFormatters;
 
-  const QInput({
-    super.key,
-    this.title,
-    this.controller,
-    this.initialValue,
-    this.onChanged,
-    this.isMandatory = false,
-  });
+  const QInput(
+      {super.key,
+      this.title,
+      this.controller,
+      this.initialValue,
+      this.onChanged,
+      this.isMandatory = false,
+      this.keyBoardType = TextInputType.text,
+      this.inputFormatters});
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +47,13 @@ class QInput extends StatelessWidget {
               TextEditingController(
                 text: initialValue ?? '',
               ),
-          onChanged: (value) => onChanged,
-          keyboardType: TextInputType.number,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-          ],
+          onChanged: (value) {
+            if(onChanged!=null) {
+              onChanged!(value);
+            }
+          },
+          keyboardType: keyBoardType,
+          inputFormatters: inputFormatters,
           decoration: InputDecoration(
             focusedBorder: outlineBorder,
             border: outlineBorder,

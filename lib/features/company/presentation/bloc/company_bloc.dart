@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:clean_architecture_flutter/core/bloc/bloc_notifier.dart';
 import 'package:clean_architecture_flutter/core/bloc/failure.dart';
 import 'package:clean_architecture_flutter/core/bloc/ui_status.dart';
+import 'package:clean_architecture_flutter/features/company/domain/entities/company_transaction_summary.dart';
 import 'package:clean_architecture_flutter/features/company/domain/entities/transaction_data_model.dart';
 import 'package:clean_architecture_flutter/features/company/domain/repositories/company_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +31,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     _SaveEntry event,
     Emitter<CompanyState> emit,
   ) async {
-    emit(state.copyWith(status: UILoading()));
+    emit(state.copyWith(status: UILoading(), notification: null));
     var data = await _companyRepository.saveEntry(event.amount);
     data.fold(
       (onError) {
@@ -39,8 +40,12 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
       (isDataSaved) {
         if (isDataSaved) {
           emit(state.copyWith(
+              status: UILoadSuccess(),
               notification: BlocNotifier.success(
                   message: '${event.amount} saved successfully')));
+
+          //refreshing dashboard
+          add(CompanyEvent.getDashboardData());
         }
       },
     );
@@ -50,7 +55,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     _WithdrawAmount event,
     Emitter<CompanyState> emit,
   ) async {
-    emit(state.copyWith(status: UILoading()));
+    emit(state.copyWith(status: UILoading(), notification: null));
     var data = await _companyRepository.withdrawAmount(
         event.amount, event.companyName);
     data.fold(
@@ -60,10 +65,13 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
       (isAmountWithdraw) {
         if (isAmountWithdraw) {
           emit(state.copyWith(
+            status: UILoadSuccess(),
             notification: BlocNotifier.success(
                 message:
                     '${event.amount} withdraw successfully from ${event.companyName}'),
           ));
+          //refreshing dashboard
+          add(CompanyEvent.getDashboardData());
         }
       },
     );
@@ -73,14 +81,15 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     _GetDashboardData event,
     Emitter<CompanyState> emit,
   ) async {
-    emit(state.copyWith(status: UILoading()));
+    emit(state.copyWith(status: UILoading(), notification: null));
     var data = await _companyRepository.getDashboardData();
     data.fold(
       (onError) {
         generalErrorHandlingUI(onError, emit);
       },
       (response) {
-        emit(state.copyWith());
+        emit(state.copyWith(
+            status: UILoadSuccess(), companyTransactionSummary: response));
       },
     );
   }
@@ -89,14 +98,15 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     _GetTransactionHistory event,
     Emitter<CompanyState> emit,
   ) async {
-    emit(state.copyWith(status: UILoading()));
+    emit(state.copyWith(status: UILoading(), notification: null));
     var data = await _companyRepository.getTransactionHistory();
     data.fold(
       (onError) {
         generalErrorHandlingUI(onError, emit);
       },
       (response) {
-        emit(state.copyWith(transactionHistory: []));
+        emit(state.copyWith(
+            transactionHistory: response, status: UILoadSuccess()));
       },
     );
   }

@@ -1,7 +1,8 @@
-import 'package:clean_architecture_flutter/core/bloc/bloc_notifier.dart';
 import 'package:clean_architecture_flutter/core/components/q_app_bar.dart';
 import 'package:clean_architecture_flutter/core/components/q_button.dart';
 import 'package:clean_architecture_flutter/core/components/q_input.dart';
+import 'package:clean_architecture_flutter/core/utils/common.dart';
+import 'package:clean_architecture_flutter/core/utils/input_formatters.dart';
 import 'package:clean_architecture_flutter/core/utils/toaster.dart';
 import 'package:clean_architecture_flutter/features/company/presentation/bloc/company_bloc.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ class SavingAmountScreen extends StatelessWidget {
                 state.notification!.message.isNotEmpty) {
               Toaster.showMessage(state.notification!.message,
                   isFailure: state.notification!.isFailure);
+
+              addAmountController.text = '';
             }
           },
           child: SingleChildScrollView(
@@ -37,6 +40,8 @@ class SavingAmountScreen extends StatelessWidget {
                     title: 'Amount',
                     controller: addAmountController,
                     isMandatory: true,
+                    keyBoardType: TextInputType.number,
+                    inputFormatters: QInputFormatter.allowOnlyDigits(),
                   ),
                   SizedBox(height: 30),
                   Center(
@@ -50,7 +55,9 @@ class SavingAmountScreen extends StatelessWidget {
                                 addAmountController.text.trim(),
                               ));
                         } else {
-                          Toaster.showMessage('Please fill all the mandatory fields',isFailure: true);
+                          Toaster.showMessage(
+                              'Please fill all the mandatory fields',
+                              isFailure: true);
                         }
                       },
                     ),
