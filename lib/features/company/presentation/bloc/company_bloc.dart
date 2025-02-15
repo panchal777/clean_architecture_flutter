@@ -26,6 +26,7 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     on<_WithdrawAmount>(_withdrawAmount);
     on<_GetTransactionHistory>(_getTransactionHistory);
     on<_GetDashboardData>(_getDashboardData);
+    on<_DeleteTransactions>(_deleteTransactions);
   }
 
   Future<void> _saveDeposit(
@@ -86,7 +87,10 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
     _GetDashboardData event,
     Emitter<CompanyState> emit,
   ) async {
-    emit(state.copyWith(status: UILoading(), notification: null));
+    emit(state.copyWith(
+        status: UILoading(),
+        notification: null,
+        companyTransactionSummary: []));
     var data = await _companyRepository.getDashboardData();
     data.fold(
       (onError) {
@@ -112,6 +116,26 @@ class CompanyBloc extends Bloc<CompanyEvent, CompanyState> {
       (response) {
         emit(state.copyWith(
             transactionHistory: response, status: UILoadSuccess()));
+      },
+    );
+  }
+
+  Future<void> _deleteTransactions(
+    _DeleteTransactions event,
+    Emitter<CompanyState> emit,
+  ) async {
+    emit(state.copyWith(status: UILoading(), notification: null));
+    var data = await _companyRepository.deleteTransactions();
+    data.fold(
+      (onError) {
+        generalErrorMessageListener(onError, emit);
+      },
+      (isTransactionDeleted) {
+        emit(state.copyWith(
+            status: UILoadSuccess(),
+            notification: BlocNotifier.success(message: 'Records deleted'),
+            isTransactionDeleted: true,
+            transactionHistory: []));
       },
     );
   }

@@ -36,9 +36,13 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                 state.notification!.message.isNotEmpty) {
               Toaster.showMessage(state.notification!.message,
                   isFailure: state.notification!.isFailure);
-              withdrawAmountController.text = '';
-              companyName = '';
-              context.pushNamed(AppRouteName.statement);
+
+              if (!state.notification!.isFailure) {
+                withdrawAmountController.text = '';
+                companyName = '';
+                context.pop();
+                context.pushNamed(AppRouteName.statement);
+              }
             }
           },
           child: SingleChildScrollView(

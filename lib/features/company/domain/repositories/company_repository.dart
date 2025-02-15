@@ -12,4 +12,6 @@ abstract class CompanyRepository {
   Future<Either<Failure, List<TransactionModel>>> getTransactionHistory();
 
   Future<Either<Failure, dynamic>> getDashboardData();
+
+  Future<Either<Failure, bool>> deleteTransactions() ;
 }

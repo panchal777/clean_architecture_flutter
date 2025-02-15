@@ -12,11 +12,11 @@ import 'package:go_router/go_router.dart';
 import '../../features/company/presentation/bloc/company_bloc.dart';
 
 class AppRouteName {
-  static const String dashboard = 'dashboard';
-  static const String saving = 'saving';
-  static const String withdraw = 'withdraw';
-  static const String history = 'history';
-  static const String statement = 'statement';
+  static const String dashboard = '/dashboard';
+  static const String saving = '/saving';
+  static const String withdraw = '/withdraw';
+  static const String history = '/history';
+  static const String statement = '/statement';
 }
 
 class AppRouter {
@@ -48,47 +48,46 @@ class AppRouter {
 
   static final _routes = <GoRoute>[
     GoRoute(
-        name: '/',
-        path: '/',
-        builder: (context, state) {
-          return SplashScreen();
-        },
-        routes: [
-          //initialising local bloc
-          GoRoute(
-            name: AppRouteName.dashboard,
-            path: AppRouteName.dashboard,
-            builder: (context, state) => MultiBlocProvider(providers: [
-              BlocProvider<CompanyBloc>(
-                  create: (context) => MainInjector.instance<CompanyBloc>()
-                    ..add(CompanyEvent.getDashboardData()))
-            ], child: DashboardScreen()),
-          ),
-          GoRoute(
-            name: AppRouteName.saving,
-            path: AppRouteName.saving,
-            builder: (context, state) => MultiBlocProvider(providers: [
-              BlocProvider<CompanyBloc>(
-                  create: (context) => MainInjector.instance<CompanyBloc>())
-            ], child: DepositAmountScreen()),
-          ),
-          GoRoute(
-            name: AppRouteName.withdraw,
-            path: AppRouteName.withdraw,
-            builder: (context, state) => MultiBlocProvider(providers: [
-              BlocProvider<CompanyBloc>(
-                  create: (context) => MainInjector.instance<CompanyBloc>())
-            ], child: WithdrawAmountScreen()),
-          ),
-          GoRoute(
-            name: AppRouteName.statement,
-            path: AppRouteName.statement,
-            builder: (context, state) => MultiBlocProvider(providers: [
-              BlocProvider<CompanyBloc>(
-                  create: (context) => MainInjector.instance<CompanyBloc>()
-                    ..add(CompanyEvent.getTransactionHistory()))
-            ], child: StatementScreen()),
-          ),
-        ]),
+      name: '/',
+      path: '/',
+      builder: (context, state) {
+        return SplashScreen();
+      },
+    ),
+    //initialising local bloc
+    GoRoute(
+      name: AppRouteName.dashboard,
+      path: AppRouteName.dashboard,
+      builder: (context, state) => MultiBlocProvider(providers: [
+        BlocProvider<CompanyBloc>(
+            create: (context) => MainInjector.instance<CompanyBloc>()
+              ..add(CompanyEvent.getDashboardData()))
+      ], child: DashboardScreen()),
+    ),
+    GoRoute(
+      name: AppRouteName.saving,
+      path: AppRouteName.saving,
+      builder: (context, state) => MultiBlocProvider(providers: [
+        BlocProvider<CompanyBloc>(
+            create: (context) => MainInjector.instance<CompanyBloc>())
+      ], child: DepositAmountScreen()),
+    ),
+    GoRoute(
+      name: AppRouteName.withdraw,
+      path: AppRouteName.withdraw,
+      builder: (context, state) => MultiBlocProvider(providers: [
+        BlocProvider<CompanyBloc>(
+            create: (context) => MainInjector.instance<CompanyBloc>())
+      ], child: WithdrawAmountScreen()),
+    ),
+    GoRoute(
+      name: AppRouteName.statement,
+      path: AppRouteName.statement,
+      builder: (context, state) => MultiBlocProvider(providers: [
+        BlocProvider<CompanyBloc>(
+            create: (context) => MainInjector.instance<CompanyBloc>()
+              ..add(CompanyEvent.getTransactionHistory()))
+      ], child: StatementScreen()),
+    ),
   ];
 }

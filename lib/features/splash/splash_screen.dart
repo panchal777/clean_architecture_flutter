@@ -16,7 +16,7 @@ class _SplashScreen extends State<SplashScreen> {
     super.initState();
     Timer(
       const Duration(seconds: 3),
-      () => context.goNamed(AppRouteName.dashboard),
+      () => context.go(AppRouteName.dashboard),
     );
   }
 

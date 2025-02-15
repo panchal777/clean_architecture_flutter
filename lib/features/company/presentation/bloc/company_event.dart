@@ -11,4 +11,6 @@ class CompanyEvent with _$CompanyEvent {
   const factory CompanyEvent.withdrawAmount(String amount,String companyName) =_WithdrawAmount ;
 
   const factory CompanyEvent.getDashboardData() = _GetDashboardData;
+
+  const factory CompanyEvent.deleteTransactions() = _DeleteTransactions;
 }

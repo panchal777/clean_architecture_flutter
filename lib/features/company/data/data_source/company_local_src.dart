@@ -10,4 +10,6 @@ abstract class CompanyLocalSrc {
   Future<List<TransactionModel>> getTransactionHistory();
 
   Future<List<CompanyTransactionSummary>> getDashboardData();
+
+  Future<bool> deleteTransactions() ;
 }

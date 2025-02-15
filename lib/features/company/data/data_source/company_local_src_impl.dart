@@ -77,4 +77,9 @@ class CompanyLocalSrcImpl implements CompanyLocalSrc {
     debugPrint('Inserted transaction ID $companyName: $insertedIdA');
     return true;
   }
+
+  @override
+  Future<bool> deleteTransactions() async {
+    return await _transactionDB.deleteTransaction();
+  }
 }

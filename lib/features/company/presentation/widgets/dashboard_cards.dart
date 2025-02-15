@@ -12,32 +12,29 @@ class DashboardCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CompanyBloc, CompanyState>(builder: (context, state) {
-      return Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: state.companyTransactionSummary?.length ?? 2,
-              itemBuilder: (context, index) {
-                var data = state.companyTransactionSummary?[index];
-                // if (data != null) {
-                //   savings = savings + data.totalCredited;
-                //   withdraws = withdraws + data.totalDebited;
-                //   debugPrint('savings---> $savings');
-                // }
+    return BlocBuilder<CompanyBloc, CompanyState>(
+        bloc: context.read<CompanyBloc>(),
+        builder: (context, state) {
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: state.companyTransactionSummary?.length ?? 2,
+                  itemBuilder: (context, index) {
+                    var data = state.companyTransactionSummary?[index];
 
-                return BindDashboardCard(
-                  companyName: data?.companyName ?? '',
-                  finalBalance: data?.finalBalance ?? 0,
-                  totalCredited: data?.totalCredited ?? 0,
-                  totalDebited: data?.totalDebited ?? 0,
-                );
-              },
-            ),
-          ),
-        ],
-      );
-    });
+                    return BindDashboardCard(
+                      companyName: data?.companyName ?? '',
+                      finalBalance: data?.finalBalance ?? 0,
+                      totalCredited: data?.totalCredited ?? 0,
+                      totalDebited: data?.totalDebited ?? 0,
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        });
   }
 }
 
@@ -98,36 +95,36 @@ class BindDashboardCard extends StatelessWidget {
           ],
         ));
   }
+}
 
-  Widget bindRows(
-    String title,
-    String value, {
-    FontWeight? fwTitle,
-    FontWeight? fwValue,
-    QTextType? qTTitle,
-    QTextType? qTValue,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: QText(
-              text: title,
-              qTextType: qTTitle ?? QTextType.medium,
-              fontWeight: fwTitle,
-            ),
+Widget bindRows(
+  String title,
+  String value, {
+  FontWeight? fwTitle,
+  FontWeight? fwValue,
+  QTextType? qTTitle,
+  QTextType? qTValue,
+}) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+    child: Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: QText(
+            text: title,
+            qTextType: qTTitle ?? QTextType.medium,
+            fontWeight: fwTitle,
           ),
-          Expanded(
-            child: QText(
-              text: value,
-              qTextType: qTValue ?? QTextType.medium,
-              fontWeight: fwValue,
-            ),
+        ),
+        Expanded(
+          child: QText(
+            text: value,
+            qTextType: qTValue ?? QTextType.medium,
+            fontWeight: fwValue,
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
 }

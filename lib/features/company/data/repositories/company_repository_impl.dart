@@ -53,8 +53,20 @@ class CompanyRepositoryImpl extends CompanyRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, bool>> deleteTransactions() async {
+    try {
+      var response = await companyLocalSrc.deleteTransactions();
+      return Right(response);
+    } catch (e, s) {
+      return Left(await checkErrorState(e, s));
+  }
+  }
+
   /*---------Error Handling----------*/
   Future<Failure> checkErrorState(e, StackTrace s) async {
     return FailureMessage(e.toString());
   }
+
+
 }

@@ -99,25 +99,11 @@ class TransactionDB {
     return maps.map((map) => TransactionModel.fromMap(map)).toList();
   }
 
-  // Update a Transaction
-  Future<int> updateTransaction(TransactionModel transaction) async {
-    final db = await databaseHelper.database;
-    return await db.update(
-      'transactions',
-      transaction.toMap(),
-      where: 'id = ?',
-      whereArgs: [transaction.id],
-    );
-  }
-
   // Delete a Transaction
-  Future<int> deleteTransaction(int primaryId) async {
+  Future<bool> deleteTransaction() async {
     final db = await databaseHelper.database;
-    return await db.delete(
-      'transactions',
-      where: 'id = ?',
-      whereArgs: [primaryId],
-    );
+    await db.delete('transactions'); // Delete all records
+    return true;
   }
 
   Future<Map<String, dynamic>> getCompanyTransactionSummary(
@@ -133,12 +119,13 @@ class TransactionDB {
   ''', [companyName]);
 
     if (result.isNotEmpty) {
+      var totalCredited = double.parse((result[0]['totalCredited'] ?? 0).toString());
+      var totalDebited = double.parse((result[0]['totalDebited'] ?? 0).toString());
       return {
         'companyName': companyName,
-        'totalCredited': result[0]['totalCredited'] as double,
-        'totalDebited': result[0]['totalDebited'] as double,
-        'finalBalance': (result[0]['totalCredited'] as double) -
-            (result[0]['totalDebited'] as double),
+        'totalCredited': totalCredited,
+        'totalDebited': totalDebited,
+        'finalBalance': totalCredited - totalDebited,
       };
     } else {
       return {
@@ -150,7 +137,7 @@ class TransactionDB {
     }
   }
 
-// Future<TransactionModel?> getLatestTransactionByCompany(
+// Future<TransactionModel?> getLatestTr ansactionByCompany(
 //     String companyName) async {
 //   final db = await databaseHelper.database;
 //   final String query = '''

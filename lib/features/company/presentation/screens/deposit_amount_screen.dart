@@ -30,7 +30,10 @@ class DepositAmountScreen extends StatelessWidget {
                   isFailure: state.notification!.isFailure);
 
               addAmountController.text = '';
-              context.pushNamed(AppRouteName.statement);
+              if (!state.notification!.isFailure) {
+                context.pop();
+                context.pushNamed(AppRouteName.statement);
+              }
             }
           },
           child: SingleChildScrollView(
